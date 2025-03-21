@@ -54,18 +54,33 @@ export default function AboutPage() {
 
   return (
     <div className="py-16 space-y-20">
-      {/* Hero Section */}
-      <SectionHeading
-        title="About Me"
-        description="Firmware engineer, hardware tinkerer, and electronic repair specialist with a passion for building robust embedded systems."
-      />
+      {/* Hero Section with Avatar */}
+      <div className="flex flex-col items-center space-y-10">
+        <motion.div
+          className="w-32 h-32 md:w-40 md:h-40 relative"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/10 to-cyan-500/10 z-0"></div>
+          <div className="w-full h-full relative z-10">
+            <CircuitSvg />
+          </div>
+          <div className="absolute inset-0 rounded-full border-2 border-blue-500/20 z-20"></div>
+        </motion.div>
+        
+        <SectionHeading
+          title="About Me"
+          description="Firmware engineer, hardware tinkerer, and electronic repair specialist with a passion for building robust embedded systems."
+        />
+      </div>
 
       {/* Bio Section */}
-      <section ref={bioRef} className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <section ref={bioRef} className="md:max-w-3xl mx-auto">
         <motion.div 
           className="space-y-6"
-          initial={{ opacity: 0, x: -50 }}
-          animate={bioInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={bioInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.7 }}
         >
           <h2 className="text-3xl font-bold text-white">My Journey</h2>
@@ -78,21 +93,6 @@ export default function AboutPage() {
           <p className="text-zinc-400">
             As a hobby, I repair electronic devices ranging from smartphones to PCs, applying my technical knowledge to troubleshoot and fix hardware issues. This hands-on experience enhances my understanding of electronic systems and fuels my passion for creating reliable firmware solutions.
           </p>
-        </motion.div>
-        
-        <motion.div
-          className="relative flex items-center justify-center"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={bioInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          <div className="w-48 h-48 md:w-64 md:h-64 relative">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/10 to-cyan-500/10 z-0"></div>
-            <div className="w-full h-full relative z-10">
-              <CircuitSvg />
-            </div>
-            <div className="absolute inset-0 rounded-full border-2 border-blue-500/20 z-20"></div>
-          </div>
         </motion.div>
       </section>
 

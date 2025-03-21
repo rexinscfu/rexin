@@ -39,6 +39,24 @@ export function CircuitSvg() {
           transition={{ duration: 0.6, delay: 0.5 }}
         />
         
+        {/* Binary pattern background on CPU */}
+        <motion.g
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.4 }}
+          transition={{ duration: 0.5, delay: 1.7 }}
+        >
+          <rect x="75" y="75" width="50" height="50" fill="url(#binary-pattern)" />
+        </motion.g>
+        <defs>
+          <pattern id="binary-pattern" patternUnits="userSpaceOnUse" width="20" height="20" patternTransform="scale(0.5)">
+            <rect width="20" height="20" fill="#1E40AF"/>
+            <text x="2" y="10" fill="#DBEAFE" fontFamily="monospace" fontSize="8">01</text>
+            <text x="12" y="10" fill="#DBEAFE" fontFamily="monospace" fontSize="8">10</text>
+            <text x="2" y="18" fill="#DBEAFE" fontFamily="monospace" fontSize="8">10</text>
+            <text x="12" y="18" fill="#DBEAFE" fontFamily="monospace" fontSize="8">01</text>
+          </pattern>
+        </defs>
+        
         {/* Animated Circuit Paths */}
         <motion.path
           d="M100 25 V70 M100 130 V175 M25 100 H70 M130 100 H175"
@@ -83,17 +101,6 @@ export function CircuitSvg() {
           <rect x="88" y="130" width="2" height="5" fill="#DBEAFE" />
           <rect x="98" y="130" width="2" height="5" fill="#DBEAFE" />
           <rect x="108" y="130" width="2" height="5" fill="#DBEAFE" />
-        </motion.g>
-        
-        {/* Binary code on chip */}
-        <motion.g
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1.8 }}
-        >
-          <text x="85" y="90" fill="#DBEAFE" fontFamily="monospace" fontSize="8">01</text>
-          <text x="85" y="100" fill="#DBEAFE" fontFamily="monospace" fontSize="8">10</text>
-          <text x="85" y="110" fill="#DBEAFE" fontFamily="monospace" fontSize="8">01</text>
         </motion.g>
         
         {/* Pulsing LED */}
