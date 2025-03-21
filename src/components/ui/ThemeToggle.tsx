@@ -11,10 +11,10 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative h-14 w-14 p-1 rounded-full bg-gradient-to-b from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 border border-gray-300 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 shadow-md hover:shadow-lg transition-all duration-300"
+      className="relative h-16 w-16 p-1 rounded-full bg-gradient-to-b from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 border border-gray-300 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 shadow-md hover:shadow-lg transition-all duration-300"
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
-      <div className="relative w-full h-full rounded-full overflow-hidden">
+      <div className="relative w-full h-full rounded-full overflow-visible">
         {/* Face background gradient */}
         <div 
           className={`absolute inset-0 transition-colors duration-300 rounded-full ${
@@ -25,34 +25,20 @@ export function ThemeToggle() {
         />
         
         {/* Moroccan hat positioned directly over the face */}
-        <motion.div
-          className="absolute -top-4 left-1/2 -translate-x-1/2 w-16 z-10"
-          initial={false}
-          animate={{
-            y: isDark ? 0 : -1,
-            rotate: isDark ? -5 : 5,
-          }}
-          transition={{ 
-            type: 'spring', 
-            stiffness: 300, 
-            damping: 20 
-          }}
-        >
-          <Image 
-            src="/images/hat.png" 
-            alt="Moroccan Hat" 
-            width={64} 
-            height={48}
-            className="object-contain"
-            priority
-          />
-        </motion.div>
+        <Image 
+          src="/images/hat.png" 
+          alt="Moroccan Hat" 
+          width={80} 
+          height={60}
+          className="absolute -top-8 left-1/2 -translate-x-1/2 z-10 object-contain"
+          priority
+        />
         
         {/* Face features that change based on light/dark mode */}
         <div className="absolute inset-0 w-full h-full">
           {/* Eyes with eyebrows - moved down a bit to account for hat */}
           <motion.div 
-            className="absolute w-full top-6 flex justify-center space-x-4"
+            className="absolute w-full top-6 flex justify-center space-x-5"
             animate={{
               y: isDark ? 0 : -1
             }}
@@ -60,9 +46,9 @@ export function ThemeToggle() {
             {/* Left eye with eyebrow */}
             <div className="relative flex flex-col items-center">
               <motion.div 
-                className={`w-1 h-0.5 mb-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
+                className={`w-1.5 h-0.5 mb-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
                 animate={{
-                  width: isDark ? 3 : 4,
+                  width: isDark ? 4 : 5,
                   height: isDark ? 1 : 1.5,
                   rotate: isDark ? -10 : 0
                 }}
@@ -70,8 +56,8 @@ export function ThemeToggle() {
               <motion.div 
                 className={`rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
                 animate={{
-                  height: isDark ? 4 : 5,
-                  width: isDark ? 3 : 4
+                  height: isDark ? 5 : 6,
+                  width: isDark ? 4 : 5
                 }}
               />
             </div>
@@ -79,9 +65,9 @@ export function ThemeToggle() {
             {/* Right eye with eyebrow */}
             <div className="relative flex flex-col items-center">
               <motion.div 
-                className={`w-1 h-0.5 mb-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
+                className={`w-1.5 h-0.5 mb-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
                 animate={{
-                  width: isDark ? 3 : 4,
+                  width: isDark ? 4 : 5,
                   height: isDark ? 1 : 1.5,
                   rotate: isDark ? 10 : 0
                 }}
@@ -89,8 +75,8 @@ export function ThemeToggle() {
               <motion.div 
                 className={`rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
                 animate={{
-                  height: isDark ? 4 : 5,
-                  width: isDark ? 3 : 4
+                  height: isDark ? 5 : 6,
+                  width: isDark ? 4 : 5
                 }}
               />
             </div>
@@ -104,8 +90,8 @@ export function ThemeToggle() {
             <motion.div
               className={`rounded-full ${isDark ? 'bg-blue-300/70' : 'bg-gray-800/70'}`}
               animate={{
-                height: 2,
-                width: 2
+                height: 3,
+                width: 3
               }}
             />
           </motion.div>
@@ -113,7 +99,7 @@ export function ThemeToggle() {
           {/* Mouth */}
           <motion.div 
             className="absolute w-full flex justify-center"
-            style={{ top: '68%' }}
+            style={{ top: '70%' }}
             animate={{
               y: isDark ? -1 : 0
             }}
@@ -121,8 +107,8 @@ export function ThemeToggle() {
             <motion.div 
               className={`rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`} 
               animate={{
-                width: isDark ? 6 : 12,
-                height: isDark ? 2 : 4,
+                width: isDark ? 8 : 16,
+                height: isDark ? 3 : 5,
                 borderRadius: isDark ? '9999px' : '9999px 9999px 0 0'
               }}
               transition={{ duration: 0.3 }}
@@ -134,24 +120,24 @@ export function ThemeToggle() {
         {isDark && (
           <>
             <motion.div
-              className="absolute top-0 right-0"
+              className="absolute top-1 right-1"
               animate={{
                 opacity: [0.2, 1, 0.2],
               }}
               transition={{ duration: 3, repeat: Infinity }}
             >
-              <svg width="10" height="10" viewBox="0 0 24 24">
+              <svg width="12" height="12" viewBox="0 0 24 24">
                 <path d="M12 2L9.2 8.6L2 9.2L7 14.2L5.8 22L12 18.6L18.2 22L17 14.2L22 9.2L14.8 8.6L12 2Z" fill="white" />
               </svg>
             </motion.div>
             <motion.div
-              className="absolute bottom-1 left-1"
+              className="absolute bottom-2 left-2"
               animate={{
                 opacity: [0.2, 1, 0.2],
               }}
               transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
             >
-              <svg width="8" height="8" viewBox="0 0 24 24">
+              <svg width="10" height="10" viewBox="0 0 24 24">
                 <path d="M12 2L9.2 8.6L2 9.2L7 14.2L5.8 22L12 18.6L18.2 22L17 14.2L22 9.2L14.8 8.6L12 2Z" fill="white" />
               </svg>
             </motion.div>
