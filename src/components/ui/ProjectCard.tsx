@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { StarIcon, CodeBracketIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { StarIcon, CodeBracketIcon, ArrowTopRightOnSquareIcon, ScaleIcon } from '@heroicons/react/24/outline';
 import { cn } from '@/utils/cn';
 
 // Repository type from GitHub API
@@ -15,6 +15,7 @@ type Repository = {
   language: string | null;
   stargazers_count: number;
   forks_count: number;
+  license?: { name: string } | null;
 };
 
 // Language colors for visual identification
@@ -84,7 +85,7 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
       </p>
       
       <div className="space-y-4 mt-auto">
-        {repository.topics.length > 0 && (
+        {repository.topics && repository.topics.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {repository.topics.slice(0, 3).map((topic) => (
               <span 
@@ -102,7 +103,7 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
           </div>
         )}
         
-        <div className="flex items-center justify-between text-sm">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
           {repository.language && (
             <div className="flex items-center">
               <span className={cn("h-3 w-3 rounded-full mr-1", languageColor)}></span>
@@ -114,6 +115,15 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
             <div className="flex items-center text-zinc-400">
               <StarIcon className="h-4 w-4 mr-1" />
               <span>{repository.stargazers_count}</span>
+            </div>
+          )}
+          
+          {repository.license && (
+            <div className="flex items-center text-zinc-400">
+              <ScaleIcon className="h-4 w-4 mr-1" />
+              <span className="text-xs truncate max-w-[100px]" title={repository.license.name}>
+                {repository.license.name}
+              </span>
             </div>
           )}
           

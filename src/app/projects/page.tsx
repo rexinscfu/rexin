@@ -1,128 +1,87 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { ProjectCard } from '@/components/ui/ProjectCard';
-import { FolderIcon } from '@heroicons/react/24/outline';
 
-// GitHub repository type
-type Repository = {
-  id: number;
-  name: string;
-  description: string;
-  html_url: string;
-  homepage: string | null;
-  topics: string[];
-  language: string | null;
-  stargazers_count: number;
-  forks_count: number;
-  updated_at: string;
-};
+// Manually defined repositories based on github.com/rexinscfu
+const repositories = [
+  {
+    id: 1,
+    name: 'rexus',
+    description: 'A minimalist, high-performance kernel for embedded systems and DIY OS projects.',
+    html_url: 'https://github.com/rexinscfu/rexus',
+    homepage: null,
+    topics: ['embedded-systems', 'operating-system', 'os-dev', 'low-level-programming', 'hardware-abstraction', 'kernel-development', 'firmware-engineering'],
+    language: 'C',
+    stargazers_count: 1,
+    forks_count: 0,
+    license: { name: 'GNU General Public License v3.0' }
+  },
+  {
+    id: 2,
+    name: 'syscall_interceptor',
+    description: 'Low-level system call interceptor for debugging and security analysis',
+    html_url: 'https://github.com/rexinscfu/syscall_interceptor',
+    homepage: null,
+    topics: ['system-calls', 'security', 'debugging'],
+    language: 'Assembly',
+    stargazers_count: 2,
+    forks_count: 0,
+    license: { name: 'MIT License' }
+  },
+  {
+    id: 3,
+    name: 'rexinengine',
+    description: 'Modern Vulkan-based game engine with a focus on high performance and extensibility.',
+    html_url: 'https://github.com/rexinscfu/rexinengine',
+    homepage: null,
+    topics: ['game-engine', 'vulkan', 'graphics', 'rendering'],
+    language: 'C++',
+    stargazers_count: 3,
+    forks_count: 0
+  },
+  {
+    id: 4,
+    name: 'Wi-Fi-6E-7',
+    description: 'High-performance Linux kernel driver for next-generation Wi-Fi 6E/7 devices with advanced features including MLO (Multi-Link Operation), 320MHz channels, and 4K QAM support.',
+    html_url: 'https://github.com/rexinscfu/Wi-Fi-6E-7',
+    homepage: null,
+    topics: ['linux', 'driver', 'kernel-driver', 'kernel-modules', 'kernel-source', 'wifi6e'],
+    language: 'C',
+    stargazers_count: 14,
+    forks_count: 1,
+    license: { name: 'MIT License' }
+  },
+  {
+    id: 5,
+    name: 'ATmega128_Firmware',
+    description: 'Rust-based firmware for the MikroElektronika BigAVR2 development board featuring the ATmega128 microcontroller.',
+    html_url: 'https://github.com/rexinscfu/ATmega128_Firmware',
+    homepage: null,
+    topics: ['rust', 'embedded-systems', 'atmega'],
+    language: 'Rust',
+    stargazers_count: 4,
+    forks_count: 0,
+    license: { name: 'MIT License' }
+  },
+  {
+    id: 6,
+    name: 'cant',
+    description: 'A specialized programming language and runtime system for automotive diagnostics and therapeutic operations.',
+    html_url: 'https://github.com/rexinscfu/cant',
+    homepage: null,
+    topics: ['programming-language', 'automotive', 'diagnostics'],
+    language: 'C',
+    stargazers_count: 3,
+    forks_count: 0
+  }
+];
 
 export default function ProjectsPage() {
-  const [repos, setRepos] = useState<Repository[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  
   const projectsRef = useRef(null);
   const projectsInView = useInView(projectsRef, { once: true, margin: "-100px" });
-
-  useEffect(() => {
-    async function fetchRepositories() {
-      try {
-        setLoading(true);
-        const response = await fetch('https://api.github.com/users/rexinscfu/repos?sort=updated&per_page=100');
-        
-        if (!response.ok) {
-          throw new Error(`GitHub API error: ${response.status}`);
-        }
-        
-        const data: Repository[] = await response.json();
-        
-        // Filter out forked repositories and sort by updated date
-        const filteredRepos = data
-          .filter(repo => !repo.fork && !repo.name.includes('.github.io'))
-          .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
-          .slice(0, 6); // Limit to 6 projects
-        
-        setRepos(filteredRepos);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching repositories:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch GitHub repositories');
-        setLoading(false);
-      }
-    }
-
-    fetchRepositories();
-  }, []);
-
-  // Render loading state
-  if (loading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="flex flex-col items-center space-y-4">
-          <div className="relative w-16 h-16">
-            <motion.div
-              className="absolute top-0 left-0 w-full h-full rounded-full border-4 border-transparent border-t-blue-500 border-r-blue-500"
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-            />
-          </div>
-          <p className="text-zinc-400 text-lg">Loading projects...</p>
-        </div>
-      </div>
-    );
-  }
-
-  // Render error state
-  if (error) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="max-w-lg text-center space-y-4">
-          <h2 className="text-2xl font-bold text-red-500">Error Loading Projects</h2>
-          <p className="text-zinc-400">{error}</p>
-          <p className="text-zinc-400">
-            Please try again later or visit my{' '}
-            <a 
-              href="https://github.com/rexinscfu" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-400 hover:underline"
-            >
-              GitHub profile
-            </a>{' '}
-            directly.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  // Render empty state
-  if (repos.length === 0) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="max-w-lg text-center space-y-4">
-          <FolderIcon className="h-16 w-16 mx-auto text-zinc-600" />
-          <h2 className="text-2xl font-bold text-white">No Projects Found</h2>
-          <p className="text-zinc-400">
-            Couldn't find any public repositories. Please visit my{' '}
-            <a 
-              href="https://github.com/rexinscfu" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-blue-400 hover:underline"
-            >
-              GitHub profile
-            </a>{' '}
-            to see all my work.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="py-16 space-y-20">
@@ -133,7 +92,7 @@ export default function ProjectsPage() {
 
       <section ref={projectsRef} className="space-y-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {repos.map((repo, index) => (
+          {repositories.map((repo, index) => (
             <motion.div
               key={repo.id}
               initial={{ opacity: 0, y: 30 }}
