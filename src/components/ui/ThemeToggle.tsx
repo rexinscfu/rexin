@@ -24,55 +24,30 @@ export function ThemeToggle() {
           }`}
         />
         
-        {/* Moroccan hat positioned with tilt */}
-        <motion.div
-          className="absolute -top-1 -left-1 w-16 h-10 z-10"
-          initial={{ rotate: -15 }}
-          animate={{ 
-            rotate: isDark ? [-15, -13, -15] : [-15, -17, -15],
-            y: isDark ? [0, -1, 0] : [0, 1, 0]
-          }}
-          transition={{ 
-            duration: 4, 
-            repeat: Infinity,
-            ease: "easeInOut" 
-          }}
-        >
-          <Image 
-            src="/images/hat.png" 
-            alt="Moroccan Hat" 
-            width={70} 
-            height={55}
-            className="object-contain"
-            priority
-          />
-        </motion.div>
-        
         {/* Face features that change based on light/dark mode */}
         <div className="absolute inset-0 w-full h-full">
-          {/* Eyes with eyebrows - positioned to look at hat */}
+          {/* Eyes with eyebrows */}
           <motion.div 
-            className="absolute w-full top-7 flex justify-center space-x-6"
+            className="absolute w-full top-5 flex justify-center space-x-6"
             animate={{
               y: isDark ? 0 : -1
             }}
           >
-            {/* Left eye with eyebrow - looking up at hat */}
+            {/* Left eye with eyebrow */}
             <div className="relative flex flex-col items-center">
               <motion.div 
                 className={`w-1.5 h-0.5 mb-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
                 animate={{
                   width: isDark ? 4 : 5,
                   height: isDark ? 1 : 1.5,
-                  rotate: isDark ? -20 : -15
+                  rotate: isDark ? -10 : -5
                 }}
               />
               <motion.div 
                 className={`rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
                 animate={{
                   height: isDark ? 5 : 6,
-                  width: isDark ? 4 : 5,
-                  x: -1
+                  width: isDark ? 4 : 5
                 }}
               />
             </div>
@@ -99,8 +74,8 @@ export function ThemeToggle() {
           
           {/* Nose */}
           <motion.div
-            className="absolute w-full flex justify-center pl-1"
-            style={{ top: '60%' }}
+            className="absolute w-full flex justify-center"
+            style={{ top: '55%' }}
           >
             <motion.div
               className={`rounded-full ${isDark ? 'bg-blue-300/70' : 'bg-gray-800/70'}`}
@@ -111,10 +86,10 @@ export function ThemeToggle() {
             />
           </motion.div>
           
-          {/* Mouth - slight smile toward hat */}
+          {/* Mouth */}
           <motion.div 
-            className="absolute w-full flex justify-center pl-1"
-            style={{ top: '72%' }}
+            className="absolute w-full flex justify-center"
+            style={{ top: '70%' }}
             animate={{
               y: isDark ? -1 : 0
             }}
@@ -124,13 +99,36 @@ export function ThemeToggle() {
               animate={{
                 width: isDark ? 8 : 14,
                 height: isDark ? 3 : 5,
-                borderRadius: '9999px 9999px 9999px 9999px',
-                rotate: -5
+                borderRadius: isDark ? '9999px' : '9999px 9999px 0 0'
               }}
               transition={{ duration: 0.3 }}
             />
           </motion.div>
         </div>
+        
+        {/* Moroccan hat positioned with tilt - moved to the corner */}
+        <motion.div
+          className="absolute -top-4 -right-2 w-10 h-8 z-10"
+          initial={{ rotate: -15 }}
+          animate={{ 
+            rotate: isDark ? [-15, -13, -15] : [-15, -17, -15],
+            y: isDark ? [0, -1, 0] : [0, 1, 0]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity,
+            ease: "easeInOut" 
+          }}
+        >
+          <Image 
+            src="/images/hat.png" 
+            alt="Moroccan Hat" 
+            width={40} 
+            height={35}
+            className="object-contain"
+            priority
+          />
+        </motion.div>
         
         {/* Stars visible only in dark mode */}
         {isDark && (
