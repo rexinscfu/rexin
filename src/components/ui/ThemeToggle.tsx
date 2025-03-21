@@ -30,7 +30,7 @@ export function ThemeToggle() {
           alt="Moroccan Hat" 
           width={80} 
           height={60}
-          className="absolute -top-8 left-1/2 -translate-x-1/2 z-10 object-contain"
+          className="absolute -top-4 left-1/2 -translate-x-1/2 z-10 object-contain"
           priority
         />
         
@@ -38,7 +38,7 @@ export function ThemeToggle() {
         <div className="absolute inset-0 w-full h-full">
           {/* Eyes with eyebrows - moved down a bit to account for hat */}
           <motion.div 
-            className="absolute w-full top-6 flex justify-center space-x-5"
+            className="absolute w-full top-7 flex justify-center space-x-5"
             animate={{
               y: isDark ? 0 : -1
             }}
@@ -85,7 +85,7 @@ export function ThemeToggle() {
           {/* Nose */}
           <motion.div
             className="absolute w-full flex justify-center"
-            style={{ top: '58%' }}
+            style={{ top: '60%' }}
           >
             <motion.div
               className={`rounded-full ${isDark ? 'bg-blue-300/70' : 'bg-gray-800/70'}`}
@@ -99,7 +99,7 @@ export function ThemeToggle() {
           {/* Mouth */}
           <motion.div 
             className="absolute w-full flex justify-center"
-            style={{ top: '70%' }}
+            style={{ top: '72%' }}
             animate={{
               y: isDark ? -1 : 0
             }}
