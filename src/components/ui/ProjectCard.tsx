@@ -59,20 +59,20 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
   return (
     <div 
       className={cn(
-        "bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col",
+        "bg-white/90 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 shadow-md rounded-xl p-6 hover:border-blue-500/30 transition-all duration-300 h-full flex flex-col",
         className
       )}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center">
           <CodeBracketIcon className="h-6 w-6 text-blue-500 mr-2" />
-          <h3 className="text-lg font-semibold text-white truncate">{formattedName}</h3>
+          <h3 className="text-lg font-semibold text-zinc-800 dark:text-white truncate">{formattedName}</h3>
         </div>
         <motion.a
           href={repository.html_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-zinc-400 hover:text-white"
+          className="text-zinc-600 hover:text-zinc-800 dark:text-zinc-400 dark:hover:text-white"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -80,7 +80,7 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
         </motion.a>
       </div>
       
-      <p className="text-zinc-400 mb-4 flex-grow line-clamp-3">
+      <p className="text-zinc-600 dark:text-zinc-400 mb-4 flex-grow line-clamp-3">
         {repository.description || `A project named ${formattedName}.`}
       </p>
       
@@ -90,13 +90,13 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
             {repository.topics.slice(0, 3).map((topic) => (
               <span 
                 key={topic} 
-                className="px-2 py-1 bg-zinc-800 text-xs rounded-full text-zinc-300"
+                className="px-2 py-1 bg-gray-100 dark:bg-zinc-800 text-xs rounded-full text-zinc-700 dark:text-zinc-300"
               >
                 {topic}
               </span>
             ))}
             {repository.topics.length > 3 && (
-              <span className="px-2 py-1 bg-zinc-800 text-xs rounded-full text-zinc-300">
+              <span className="px-2 py-1 bg-gray-100 dark:bg-zinc-800 text-xs rounded-full text-zinc-700 dark:text-zinc-300">
                 +{repository.topics.length - 3}
               </span>
             )}
@@ -107,19 +107,19 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
           {repository.language && (
             <div className="flex items-center">
               <span className={cn("h-3 w-3 rounded-full mr-1", languageColor)}></span>
-              <span className="text-zinc-400">{repository.language}</span>
+              <span className="text-zinc-600 dark:text-zinc-400">{repository.language}</span>
             </div>
           )}
           
           {repository.stargazers_count > 0 && (
-            <div className="flex items-center text-zinc-400">
+            <div className="flex items-center text-zinc-600 dark:text-zinc-400">
               <StarIcon className="h-4 w-4 mr-1" />
               <span>{repository.stargazers_count}</span>
             </div>
           )}
           
           {repository.license && (
-            <div className="flex items-center text-zinc-400">
+            <div className="flex items-center text-zinc-600 dark:text-zinc-400">
               <ScaleIcon className="h-4 w-4 mr-1" />
               <span className="text-xs truncate max-w-[100px]" title={repository.license.name}>
                 {repository.license.name}
@@ -132,7 +132,7 @@ export function ProjectCard({ repository, className }: ProjectCardProps) {
               href={repository.homepage}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 hover:underline text-xs"
+              className="text-blue-500 dark:text-blue-400 hover:underline text-xs"
             >
               Live Demo
             </a>

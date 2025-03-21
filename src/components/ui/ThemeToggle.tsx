@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { useTheme } from '@/utils/ThemeProvider';
 
@@ -10,7 +11,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative h-14 w-14 p-2 rounded-full bg-gradient-to-b from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 border border-gray-300 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 shadow-md hover:shadow-lg transition-all duration-300"
+      className="relative h-14 w-14 p-1 rounded-full bg-gradient-to-b from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 border border-gray-300 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 shadow-md hover:shadow-lg transition-all duration-300"
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
       <div className="relative w-full h-full rounded-full overflow-hidden">
@@ -105,13 +106,13 @@ export function ThemeToggle() {
           </motion.div>
         </div>
         
-        {/* Moroccan hat (Fez) - larger and more detailed */}
+        {/* Moroccan hat image */}
         <motion.div
-          className="absolute -top-5 left-0 w-full"
+          className="absolute -top-5 -left-2 w-18 h-16 z-10"
           initial={false}
           animate={{
             y: isDark ? 0 : -2,
-            rotateZ: isDark ? -5 : 5
+            rotate: isDark ? -5 : 5
           }}
           transition={{ 
             type: 'spring', 
@@ -119,85 +120,13 @@ export function ThemeToggle() {
             damping: 20 
           }}
         >
-          {/* The Fez hat SVG */}
-          <svg 
-            viewBox="0 0 60 40" 
-            fill="none" 
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full h-auto"
-          >
-            {/* Hat shadow */}
-            <ellipse
-              cx="30"
-              cy="28"
-              rx="15"
-              ry="2"
-              fill="rgba(0,0,0,0.2)"
-            />
-            
-            {/* Hat base */}
-            <path 
-              d="M15 25C15 20 22 10 30 10C38 10 45 20 45 25H15Z" 
-              fill={isDark ? "#991B1B" : "#C2410C"} 
-              stroke={isDark ? "#7F1D1D" : "#9A3412"} 
-              strokeWidth="1"
-            />
-            
-            {/* Hat band */}
-            <rect 
-              x="15" 
-              y="25" 
-              width="30" 
-              height="3" 
-              fill={isDark ? "#1E40AF" : "#0C4A6E"} 
-              stroke={isDark ? "#1E3A8A" : "#0E7490"} 
-              strokeWidth="0.5"
-            />
-            
-            {/* Decorative pattern on hat */}
-            <motion.g
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
-              <circle cx="22" cy="18" r="1.5" fill={isDark ? "#60A5FA" : "#FACC15"} />
-              <circle cx="30" cy="15" r="1.5" fill={isDark ? "#60A5FA" : "#FACC15"} />
-              <circle cx="38" cy="18" r="1.5" fill={isDark ? "#60A5FA" : "#FACC15"} />
-              <path 
-                d="M22 18C24 16 27 15 30 15C33 15 36 16 38 18" 
-                stroke={isDark ? "#60A5FA" : "#FACC15"} 
-                strokeWidth="1" 
-                strokeDasharray="2 1" 
-              />
-              <path
-                d="M17 23C20 16 25 14 30 14C35 14 40 16 43 23"
-                stroke={isDark ? "#60A5FA" : "#FACC15"}
-                strokeWidth="0.5"
-                strokeDasharray="1 1"
-              />
-            </motion.g>
-
-            {/* Tassel animated */}
-            <motion.g
-              animate={{
-                y: [0, -1, 0],
-                x: isDark ? [-0.5, 0.5, -0.5] : [0.5, -0.5, 0.5]
-              }}
-              transition={{
-                repeat: Infinity,
-                duration: 2,
-                ease: "easeInOut"
-              }}
-            >
-              <path 
-                d="M30 10L30 5M30 5L27 1M30 5L33 1" 
-                stroke={isDark ? "#60A5FA" : "#FACC15"} 
-                strokeWidth="2" 
-                strokeLinecap="round"
-              />
-              <circle cx="30" cy="1" r="1" fill={isDark ? "#60A5FA" : "#FACC15"} />
-            </motion.g>
-          </svg>
+          <Image 
+            src="/images/hat.png" 
+            alt="Moroccan Hat" 
+            width={100} 
+            height={80}
+            className="object-contain"
+          />
         </motion.div>
         
         {/* Stars visible only in dark mode */}
@@ -231,7 +160,7 @@ export function ThemeToggle() {
         {/* Sun rays visible only in light mode */}
         {!isDark && (
           <motion.div
-            className="absolute right-0 left-0 top-0 bottom-0 flex items-center justify-center"
+            className="absolute right-0 left-0 top-0 bottom-0 flex items-center justify-center z-0"
             initial={false}
             animate={{
               rotate: 360,
