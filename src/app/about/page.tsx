@@ -87,15 +87,16 @@ export default function AboutPage() {
           transition={{ duration: 0.7, delay: 0.2 }}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 z-10 rounded-xl"></div>
-          <Image 
-            src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-            fill
-            style={{ objectFit: 'cover' }}
-            alt="Engineer working on electronics"
-            quality={90}
-            priority
-            className="rounded-xl"
-          />
+          <div className="relative h-full w-full bg-zinc-900 rounded-xl">
+            {/* Placeholder gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-xl"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-zinc-700 text-lg font-mono p-4 text-center">
+                &lt;/&gt; <br/>
+                Circuit Board Image
+              </div>
+            </div>
+          </div>
         </motion.div>
       </section>
 
