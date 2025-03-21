@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    /* Light mode */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -27,6 +28,7 @@
   }
 
   .dark {
+    /* Dark mode */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -51,10 +53,32 @@
 
 @layer base {
   * {
-    @apply border-zinc-800;
+    @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Light/Dark mode background adjustments */
+  body {
+    @apply bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-50 transition-colors duration-300;
+  }
+  
+  /* Light/Dark specific styles */
+  .dark .dark-only {
+    display: block;
+  }
+  
+  .dark-only {
+    display: none;
+  }
+  
+  .light-only {
+    display: block;
+  }
+  
+  .dark .light-only {
+    display: none;
   }
 }
 
@@ -64,13 +88,13 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-zinc-950;
+  @apply bg-gray-100 dark:bg-zinc-950;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-800 rounded-full;
+  @apply bg-gray-300 dark:bg-zinc-800 rounded-full;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-zinc-700;
+  @apply bg-gray-400 dark:bg-zinc-700;
 }

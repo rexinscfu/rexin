@@ -185,7 +185,7 @@ export default function ContactPage() {
                     onChange={handleChange}
                     required
                     className="w-full bg-zinc-800 border border-zinc-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="john@example.com"
+                    placeholder="rexin@prpmailys.xyz"
                   />
                 </div>
               </div>

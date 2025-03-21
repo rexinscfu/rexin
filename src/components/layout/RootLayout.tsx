@@ -4,17 +4,21 @@ import { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { useTheme } from '@/utils/ThemeProvider';
 
 interface RootLayoutProps {
   children: ReactNode;
 }
 
 export function RootLayout({ children }: RootLayoutProps) {
+  const { theme } = useTheme();
+  
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50 flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-50 flex flex-col transition-colors duration-300">
       <Header />
       <AnimatePresence mode="wait">
         <motion.main
+          key={theme}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
