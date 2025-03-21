@@ -1,10 +1,10 @@
 'use client';
 
 import { useRef } from 'react';
-import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 import { SectionHeading } from '@/components/ui/SectionHeading';
 import { SkillBar } from '@/components/ui/SkillBar';
+import { CircuitSvg } from '@/components/ui/CircuitSvg';
 
 // Skill type definition
 type Skill = {
@@ -81,22 +81,13 @@ export default function AboutPage() {
         </motion.div>
         
         <motion.div
-          className="relative h-[400px] rounded-xl overflow-hidden"
+          className="relative h-[400px] rounded-xl overflow-hidden border border-zinc-800 shadow-lg"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={bioInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 z-10 rounded-xl"></div>
-          <div className="relative h-full w-full bg-zinc-900 rounded-xl">
-            {/* Placeholder gradient background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-xl"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-zinc-700 text-lg font-mono p-4 text-center">
-                &lt;/&gt; <br/>
-                Circuit Board Image
-              </div>
-            </div>
-          </div>
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 z-10 rounded-xl"></div>
+          <CircuitSvg />
         </motion.div>
       </section>
 
