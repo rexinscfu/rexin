@@ -106,7 +106,7 @@ export default function ContactPage() {
                     </svg>
                   </a>
                   <a 
-                    href="https://linkedin.com/" 
+                    href="https://linkedin.com/in/fayssal-chokri-6315b42a1" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-zinc-400 hover:text-white transition-colors"
@@ -116,7 +116,7 @@ export default function ContactPage() {
                     </svg>
                   </a>
                   <a 
-                    href="https://twitter.com/" 
+                    href="https://twitter.com/rexinscfu" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-zinc-400 hover:text-white transition-colors"
