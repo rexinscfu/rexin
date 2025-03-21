@@ -36,7 +36,7 @@ export function Header() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 py-4 transition-all duration-300',
         isScrolled
-          ? 'bg-zinc-900/95 dark:bg-zinc-900/95 backdrop-blur-md shadow-lg'
+          ? 'bg-white/95 dark:bg-zinc-900/95 backdrop-blur-md shadow-lg border-b border-gray-200 dark:border-zinc-800'
           : 'bg-transparent'
       )}
     >
@@ -71,8 +71,8 @@ export function Header() {
                 <Link
                   href={link.href}
                   className={cn(
-                    "text-zinc-400 hover:text-white dark:text-zinc-300 dark:hover:text-white transition-colors duration-200 py-1 px-1",
-                    isActive && "text-white dark:text-white"
+                    "text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white transition-colors duration-200 py-1 px-1",
+                    isActive && "text-blue-600 dark:text-white font-medium"
                   )}
                 >
                   {link.label}
@@ -98,7 +98,7 @@ export function Header() {
 
         {/* Mobile Menu Toggle */}
         <motion.button
-          className="md:hidden text-zinc-300 hover:text-white"
+          className="md:hidden text-gray-600 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-white"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle mobile menu"
           initial={{ opacity: 0 }}
@@ -121,7 +121,7 @@ export function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-zinc-900 shadow-lg overflow-hidden"
+            className="md:hidden bg-white dark:bg-zinc-900 shadow-lg overflow-hidden border-t border-gray-200 dark:border-zinc-800"
           >
             <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
               {navLinks.map((link, index) => {
@@ -142,8 +142,8 @@ export function Header() {
                       className={cn(
                         "block py-2 px-4 rounded-lg transition-all duration-200 relative overflow-hidden",
                         isActive 
-                          ? "text-white bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-l-2 border-blue-500" 
-                          : "text-zinc-400 hover:text-white hover:bg-zinc-800"
+                          ? "text-blue-600 dark:text-white bg-blue-50 dark:bg-gradient-to-r dark:from-blue-500/20 dark:to-cyan-500/20 border-l-2 border-blue-500" 
+                          : "text-gray-600 dark:text-zinc-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:text-white dark:hover:bg-zinc-800"
                       )}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
