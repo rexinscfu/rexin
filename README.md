@@ -22,7 +22,7 @@ A modern, animated portfolio website built with Next.js, React, and TailwindCSS.
 
 1. Clone the repository:
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/rexinscfu/rexin.git
    ```
 
 2. Install dependencies:
@@ -35,7 +35,7 @@ A modern, animated portfolio website built with Next.js, React, and TailwindCSS.
    npm run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. Open [http://localhost:3000](http://localhost:3000) or (3001) in your browser.
 
 ## Project Structure
 
