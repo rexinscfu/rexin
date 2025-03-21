@@ -81,13 +81,18 @@ export default function AboutPage() {
         </motion.div>
         
         <motion.div
-          className="relative h-[400px] rounded-xl overflow-hidden border border-zinc-800 shadow-lg"
+          className="relative flex items-center justify-center"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={bioInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 z-10 rounded-xl"></div>
-          <CircuitSvg />
+          <div className="w-48 h-48 md:w-64 md:h-64 relative">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-500/10 to-cyan-500/10 z-0"></div>
+            <div className="w-full h-full relative z-10">
+              <CircuitSvg />
+            </div>
+            <div className="absolute inset-0 rounded-full border-2 border-blue-500/20 z-20"></div>
+          </div>
         </motion.div>
       </section>
 
