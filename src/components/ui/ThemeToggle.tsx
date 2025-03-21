@@ -10,7 +10,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={toggleTheme}
-      className="relative h-12 w-12 p-2 rounded-full bg-gradient-to-b from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 border border-gray-300 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 shadow-md hover:shadow-lg transition-all duration-300"
+      className="relative h-14 w-14 p-2 rounded-full bg-gradient-to-b from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 border border-gray-300 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 shadow-md hover:shadow-lg transition-all duration-300"
       aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
     >
       <div className="relative w-full h-full rounded-full overflow-hidden">
@@ -25,27 +25,62 @@ export function ThemeToggle() {
         
         {/* Face features that change based on light/dark mode */}
         <div className="absolute inset-0 w-full h-full">
-          {/* Eyes */}
+          {/* Eyes with eyebrows */}
           <motion.div 
-            className="absolute w-full top-5 flex justify-center space-x-3"
+            className="absolute w-full top-5 flex justify-center space-x-4"
             animate={{
               y: isDark ? 0 : -1
             }}
           >
-            {/* Left eye */}
-            <motion.div 
-              className={`w-1.5 h-${isDark ? '1' : '1.5'} rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
+            {/* Left eye with eyebrow */}
+            <div className="relative flex flex-col items-center">
+              <motion.div 
+                className={`w-1 h-0.5 mb-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
+                animate={{
+                  width: isDark ? 3 : 4,
+                  height: isDark ? 1 : 1.5,
+                  rotate: isDark ? -10 : 0
+                }}
+              />
+              <motion.div 
+                className={`rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
+                animate={{
+                  height: isDark ? 4 : 5,
+                  width: isDark ? 3 : 4
+                }}
+              />
+            </div>
+            
+            {/* Right eye with eyebrow */}
+            <div className="relative flex flex-col items-center">
+              <motion.div 
+                className={`w-1 h-0.5 mb-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
+                animate={{
+                  width: isDark ? 3 : 4,
+                  height: isDark ? 1 : 1.5,
+                  rotate: isDark ? 10 : 0
+                }}
+              />
+              <motion.div 
+                className={`rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
+                animate={{
+                  height: isDark ? 4 : 5,
+                  width: isDark ? 3 : 4
+                }}
+              />
+            </div>
+          </motion.div>
+          
+          {/* Nose */}
+          <motion.div
+            className="absolute w-full flex justify-center"
+            style={{ top: '52%' }}
+          >
+            <motion.div
+              className={`rounded-full ${isDark ? 'bg-blue-300/70' : 'bg-gray-800/70'}`}
               animate={{
-                height: isDark ? 3 : 4,
-                width: isDark ? 2 : 3
-              }}
-            />
-            {/* Right eye */}
-            <motion.div 
-              className={`w-1.5 h-${isDark ? '1' : '1.5'} rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`}
-              animate={{
-                height: isDark ? 3 : 4,
-                width: isDark ? 2 : 3
+                height: 2,
+                width: 2
               }}
             />
           </motion.div>
@@ -53,16 +88,17 @@ export function ThemeToggle() {
           {/* Mouth */}
           <motion.div 
             className="absolute w-full flex justify-center"
-            style={{ top: '60%' }}
+            style={{ top: '62%' }}
             animate={{
               y: isDark ? -1 : 0
             }}
           >
             <motion.div 
-              className={`h-1 rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`} 
+              className={`rounded-full ${isDark ? 'bg-blue-300' : 'bg-gray-800'}`} 
               animate={{
-                width: isDark ? 6 : 10,
-                height: isDark ? 2 : 3
+                width: isDark ? 6 : 12,
+                height: isDark ? 2 : 4,
+                borderRadius: isDark ? '9999px' : '9999px 9999px 0 0'
               }}
               transition={{ duration: 0.3 }}
             />
@@ -71,10 +107,10 @@ export function ThemeToggle() {
         
         {/* Moroccan hat (Fez) - larger and more detailed */}
         <motion.div
-          className="absolute -top-6 left-0 w-full"
+          className="absolute -top-5 left-0 w-full"
           initial={false}
           animate={{
-            y: isDark ? 0 : -1,
+            y: isDark ? 0 : -2,
             rotateZ: isDark ? -5 : 5
           }}
           transition={{ 
@@ -90,6 +126,15 @@ export function ThemeToggle() {
             xmlns="http://www.w3.org/2000/svg"
             className="w-full h-auto"
           >
+            {/* Hat shadow */}
+            <ellipse
+              cx="30"
+              cy="28"
+              rx="15"
+              ry="2"
+              fill="rgba(0,0,0,0.2)"
+            />
+            
             {/* Hat base */}
             <path 
               d="M15 25C15 20 22 10 30 10C38 10 45 20 45 25H15Z" 
@@ -115,14 +160,20 @@ export function ThemeToggle() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              <circle cx="22" cy="18" r="1" fill={isDark ? "#60A5FA" : "#FACC15"} />
-              <circle cx="30" cy="15" r="1" fill={isDark ? "#60A5FA" : "#FACC15"} />
-              <circle cx="38" cy="18" r="1" fill={isDark ? "#60A5FA" : "#FACC15"} />
+              <circle cx="22" cy="18" r="1.5" fill={isDark ? "#60A5FA" : "#FACC15"} />
+              <circle cx="30" cy="15" r="1.5" fill={isDark ? "#60A5FA" : "#FACC15"} />
+              <circle cx="38" cy="18" r="1.5" fill={isDark ? "#60A5FA" : "#FACC15"} />
               <path 
                 d="M22 18C24 16 27 15 30 15C33 15 36 16 38 18" 
                 stroke={isDark ? "#60A5FA" : "#FACC15"} 
-                strokeWidth="0.5" 
-                strokeDasharray="1 1" 
+                strokeWidth="1" 
+                strokeDasharray="2 1" 
+              />
+              <path
+                d="M17 23C20 16 25 14 30 14C35 14 40 16 43 23"
+                stroke={isDark ? "#60A5FA" : "#FACC15"}
+                strokeWidth="0.5"
+                strokeDasharray="1 1"
               />
             </motion.g>
 
@@ -139,11 +190,12 @@ export function ThemeToggle() {
               }}
             >
               <path 
-                d="M30 10L30 5M30 5L28 2M30 5L32 2" 
+                d="M30 10L30 5M30 5L27 1M30 5L33 1" 
                 stroke={isDark ? "#60A5FA" : "#FACC15"} 
-                strokeWidth="1.5" 
+                strokeWidth="2" 
                 strokeLinecap="round"
               />
+              <circle cx="30" cy="1" r="1" fill={isDark ? "#60A5FA" : "#FACC15"} />
             </motion.g>
           </svg>
         </motion.div>
@@ -158,7 +210,7 @@ export function ThemeToggle() {
               }}
               transition={{ duration: 3, repeat: Infinity }}
             >
-              <svg width="12" height="12" viewBox="0 0 24 24">
+              <svg width="10" height="10" viewBox="0 0 24 24">
                 <path d="M12 2L9.2 8.6L2 9.2L7 14.2L5.8 22L12 18.6L18.2 22L17 14.2L22 9.2L14.8 8.6L12 2Z" fill="white" />
               </svg>
             </motion.div>
@@ -178,20 +230,22 @@ export function ThemeToggle() {
         
         {/* Sun rays visible only in light mode */}
         {!isDark && (
-          <>
-            <motion.div
-              className="absolute -top-1 right-0"
-              animate={{
-                rotate: 360
-              }}
-              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="4" fill="#FB923C" />
-                <path d="M12 4V2M12 22V20M4 12H2M22 12H20M19.8 19.8L18.4 18.4M19.8 4.2L18.4 5.6M4.2 19.8L5.6 18.4M4.2 4.2L5.6 5.6" stroke="#FB923C" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </motion.div>
-          </>
+          <motion.div
+            className="absolute right-0 left-0 top-0 bottom-0 flex items-center justify-center"
+            initial={false}
+            animate={{
+              rotate: 360,
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          >
+            <svg className="absolute w-full h-full" viewBox="0 0 40 40" fill="none">
+              <path d="M20 5V2M20 38V35M5 20H2M38 20H35M32 32L30 30M32 8L30 10M8 32L10 30M8 8L10 10" 
+                    stroke="#FB923C" 
+                    strokeWidth="1" 
+                    strokeLinecap="round" 
+                    strokeOpacity="0.5" />
+            </svg>
+          </motion.div>
         )}
       </div>
     </button>

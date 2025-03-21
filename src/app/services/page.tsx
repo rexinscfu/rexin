@@ -77,21 +77,21 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={servicesInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.5, delay: 0.1 * index }}
-              className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 hover:border-blue-500/30 transition-all duration-300"
+              className="bg-white/90 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 shadow-md rounded-xl p-6 hover:border-blue-500/30 transition-all duration-300"
             >
               <div className="flex items-start space-x-4">
                 <div className="bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-3 rounded-lg">
-                  <service.icon className="h-8 w-8 text-blue-400" />
+                  <service.icon className="h-8 w-8 text-blue-500 dark:text-blue-400" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-white mb-2">{service.title}</h3>
-                  <p className="text-zinc-400 mb-4">{service.description}</p>
+                  <h3 className="text-xl font-semibold text-zinc-800 dark:text-white mb-2">{service.title}</h3>
+                  <p className="text-zinc-600 dark:text-zinc-400 mb-4">{service.description}</p>
                   
                   <div className="flex flex-wrap gap-2 mt-4">
                     {service.skills.map((skill) => (
                       <span 
                         key={skill} 
-                        className="px-2 py-1 bg-zinc-800 text-xs rounded-full text-zinc-300"
+                        className="px-2 py-1 bg-gray-100 dark:bg-zinc-800 text-xs rounded-full text-zinc-700 dark:text-zinc-300"
                       >
                         {skill}
                       </span>
@@ -103,15 +103,15 @@ export default function ServicesPage() {
           ))}
         </div>
         
-        <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-8 max-w-3xl mx-auto">
+        <div className="bg-white/90 dark:bg-zinc-900/50 border border-gray-200 dark:border-zinc-800 shadow-md rounded-xl p-8 max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0 }}
             animate={servicesInView ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
             className="text-center space-y-6"
           >
-            <h3 className="text-2xl font-semibold text-white">Need a Custom Solution?</h3>
-            <p className="text-zinc-400">
+            <h3 className="text-2xl font-semibold text-zinc-800 dark:text-white">Need a Custom Solution?</h3>
+            <p className="text-zinc-600 dark:text-zinc-400">
               I offer tailored services to meet your specific project requirements. From concept to implementation, 
               I can help bring your technical vision to life with professional expertise in firmware and hardware development.
             </p>

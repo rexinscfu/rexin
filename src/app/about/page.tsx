@@ -83,14 +83,14 @@ export default function AboutPage() {
           animate={bioInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.7 }}
         >
-          <h2 className="text-3xl font-bold text-white">My Journey</h2>
-          <p className="text-zinc-400">
+          <h2 className="text-3xl font-bold text-zinc-800 dark:text-white">My Journey</h2>
+          <p className="text-zinc-600 dark:text-zinc-400">
             I'm a passionate firmware developer and hardware enthusiast with experience in developing open source solutions. My journey began in web development, where I honed my programming skills before transitioning to the exciting world of firmware and hardware.
           </p>
-          <p className="text-zinc-400">
+          <p className="text-zinc-600 dark:text-zinc-400">
             Over the years, I've evolved from a junior developer to specializing in firmware development and hardware driver implementation. I enjoy working with low-level interfaces and embedded systems, creating robust solutions that bridge the gap between hardware and software.
           </p>
-          <p className="text-zinc-400">
+          <p className="text-zinc-600 dark:text-zinc-400">
             As a hobby, I repair electronic devices ranging from smartphones to PCs, applying my technical knowledge to troubleshoot and fix hardware issues. This hands-on experience enhances my understanding of electronic systems and fuels my passion for creating reliable firmware solutions.
           </p>
         </motion.div>
@@ -108,7 +108,7 @@ export default function AboutPage() {
             animate={skillsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.7, delay: 0.2 }}
           >
-            <h3 className="text-xl font-semibold text-blue-400">Firmware & Hardware</h3>
+            <h3 className="text-xl font-semibold text-blue-500 dark:text-blue-400">Firmware & Hardware</h3>
             <div className="space-y-4">
               {skills
                 .filter(skill => ['firmware', 'hardware'].includes(skill.category))
@@ -131,7 +131,7 @@ export default function AboutPage() {
             animate={skillsInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
             transition={{ duration: 0.7, delay: 0.4 }}
           >
-            <h3 className="text-xl font-semibold text-cyan-400">Software & Tools</h3>
+            <h3 className="text-xl font-semibold text-cyan-500 dark:text-cyan-400">Software & Tools</h3>
             <div className="space-y-4">
               {skills
                 .filter(skill => ['software', 'tools'].includes(skill.category))
@@ -185,24 +185,24 @@ export default function AboutPage() {
             >
               {/* Timeline line */}
               {index < 2 && (
-                <div className="hidden md:block absolute left-[19px] top-8 w-0.5 h-full bg-zinc-800 z-0"></div>
+                <div className="hidden md:block absolute left-[19px] top-8 w-0.5 h-full bg-gray-200 dark:bg-zinc-800 z-0"></div>
               )}
               
               {/* Time period */}
               <div className="md:col-span-2 flex md:justify-start items-start">
                 <div className="relative z-10">
-                  <div className="h-10 w-10 rounded-full bg-zinc-900 border-2 border-blue-500 flex items-center justify-center">
+                  <div className="h-10 w-10 rounded-full bg-white dark:bg-zinc-900 border-2 border-blue-500 flex items-center justify-center">
                     <div className="h-3 w-3 rounded-full bg-blue-500"></div>
                   </div>
                 </div>
-                <div className="ml-4 md:ml-6 text-zinc-400">{item.period}</div>
+                <div className="ml-4 md:ml-6 text-zinc-600 dark:text-zinc-400">{item.period}</div>
               </div>
               
               {/* Experience details */}
-              <div className="md:col-span-8 bg-zinc-900/50 rounded-xl p-6 border border-zinc-800 hover:border-blue-500/30 transition-all duration-300">
-                <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                <p className="text-blue-400 mb-2">{item.company}</p>
-                <p className="text-zinc-400">{item.description}</p>
+              <div className="md:col-span-8 bg-white/90 dark:bg-zinc-900/50 shadow-md rounded-xl p-6 border border-gray-200 dark:border-zinc-800 hover:border-blue-500/30 transition-all duration-300">
+                <h3 className="text-xl font-semibold text-zinc-800 dark:text-white">{item.title}</h3>
+                <p className="text-blue-500 dark:text-blue-400 mb-2">{item.company}</p>
+                <p className="text-zinc-600 dark:text-zinc-400">{item.description}</p>
               </div>
             </motion.div>
           ))}
