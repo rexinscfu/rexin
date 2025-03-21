@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useTheme } from '@/utils/ThemeProvider';
+import { ZellijBackground } from '@/components/ui/ZellijBackground';
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -14,7 +15,10 @@ export function RootLayout({ children }: RootLayoutProps) {
   const { theme } = useTheme();
   
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-50 flex flex-col transition-colors duration-500">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-800 dark:text-zinc-50 flex flex-col transition-colors duration-500 relative">
+      {/* Moroccan Zellij Background Pattern */}
+      <ZellijBackground />
+      
       <Header />
       <AnimatePresence mode="wait">
         <motion.main
