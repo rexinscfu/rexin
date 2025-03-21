@@ -108,10 +108,10 @@ export function ThemeToggle() {
         
         {/* Moroccan hat positioned with tilt - moved to the corner */}
         <motion.div
-          className="absolute -top-4 -right-2 w-10 h-8 z-10"
-          initial={{ rotate: -15 }}
+          className="absolute -top-4 left-1/2 w-14 h-12 z-10 transform -translate-x-1/2"
+          initial={{ rotate: -5 }}
           animate={{ 
-            rotate: isDark ? [-15, -13, -15] : [-15, -17, -15],
+            rotate: isDark ? [-5, -3, -5] : [-5, -7, -5],
             y: isDark ? [0, -1, 0] : [0, 1, 0]
           }}
           transition={{ 
@@ -123,8 +123,8 @@ export function ThemeToggle() {
           <Image 
             src="/images/hat.png" 
             alt="Moroccan Hat" 
-            width={40} 
-            height={35}
+            width={60} 
+            height={50}
             className="object-contain"
             priority
           />
