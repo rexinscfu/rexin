@@ -70,13 +70,13 @@ export default function AboutPage() {
         >
           <h2 className="text-3xl font-bold text-white">My Journey</h2>
           <p className="text-zinc-400">
-            I'm a passionate firmware engineer with over 5 years of experience in developing low-level software for embedded systems. My fascination with electronics began at an early age when I disassembled my first electronic toy to understand how it worked.
+            I'm a passionate firmware developer and hardware enthusiast with experience in developing open source solutions. My journey began in web development, where I honed my programming skills before transitioning to the exciting world of firmware and hardware.
           </p>
           <p className="text-zinc-400">
-            This curiosity evolved into a career where I specialize in creating robust firmware solutions, designing hardware, and repairing complex electronic systems. I take pride in building efficient, reliable embedded systems that bridge the gap between hardware and software.
+            Over the years, I've evolved from a junior developer to specializing in firmware development and hardware driver implementation. I enjoy working with low-level interfaces and embedded systems, creating robust solutions that bridge the gap between hardware and software.
           </p>
           <p className="text-zinc-400">
-            When I'm not coding or soldering, you'll find me exploring the latest developments in microcontroller technology, contributing to open-source projects, or restoring vintage electronics.
+            As a hobby, I repair electronic devices ranging from smartphones to PCs, applying my technical knowledge to troubleshoot and fix hardware issues. This hands-on experience enhances my understanding of electronic systems and fuels my passion for creating reliable firmware solutions.
           </p>
         </motion.div>
         
@@ -162,22 +162,22 @@ export default function AboutPage() {
           {/* Timeline items */}
           {[
             {
-              title: "Senior Firmware Engineer",
-              company: "TechInnovate Solutions",
-              period: "2021 - Present",
-              description: "Lead firmware development for IoT devices, optimize embedded software performance, and architect low-level solutions for resource-constrained environments."
+              title: "Open Source Firmware Developer",
+              company: "Independent",
+              period: "2024 - 2025",
+              description: "Developed open source firmware solutions while pursuing hardware repair as a hobby, focusing on phones, PCs, and various electronic devices."
             },
             {
-              title: "Hardware Developer",
-              company: "ElectroSystems Inc.",
-              period: "2018 - 2021",
-              description: "Designed PCBs, implemented sensor interfaces, and developed prototype hardware for industrial automation systems."
+              title: "Open Source Firmware Developer / HW Driver Dev",
+              company: "Open Source Projects",
+              period: "2022 - 2023",
+              description: "Specialized in firmware development and hardware driver implementation for open source projects, working with low-level system interfaces and embedded platforms."
             },
             {
-              title: "Embedded Software Engineer",
-              company: "ConnectedDevices Ltd.",
-              period: "2016 - 2018",
-              description: "Developed firmware for wireless connectivity modules, implemented communication protocols, and created low-power embedded solutions."
+              title: "Junior Open Source Developer",
+              company: "Web Development",
+              period: "2020 - 2022",
+              description: "Contributed to open source web development projects, focusing on frontend and backend technologies while building a foundation in software development practices."
             }
           ].map((item, index) => (
             <motion.div 
