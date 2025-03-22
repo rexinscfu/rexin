@@ -21,8 +21,9 @@
 code[class*="language-"],
 pre[class*="language-"] {
   color: var(--prism-text);
+  background: none;
   font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
-  font-size: 0.9em;
+  font-size: 1em;
   text-align: left;
   white-space: pre;
   word-spacing: normal;
@@ -36,9 +37,10 @@ pre[class*="language-"] {
 /* Code blocks */
 pre[class*="language-"] {
   padding: 1em;
-  margin: 0.5em 0;
+  margin: .5em 0;
   overflow: auto;
   border-radius: 0.3em;
+  background: var(--prism-background);
 }
 
 :not(pre) > code[class*="language-"],
@@ -48,8 +50,8 @@ pre[class*="language-"] {
 
 /* Inline code */
 :not(pre) > code[class*="language-"] {
-  padding: 0.1em;
-  border-radius: 0.3em;
+  padding: .1em;
+  border-radius: .3em;
   white-space: normal;
 }
 
@@ -150,6 +152,7 @@ pre[class*="language-"].line-numbers > code {
 }
 
 .line-numbers-rows > span {
+  pointer-events: none;
   display: block;
   counter-increment: linenumber;
 }

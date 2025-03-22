@@ -28,52 +28,96 @@ interface MDXContentProps {
   content: string;
 }
 
+// Process markdown content to enhance code blocks with language detection
+function processCodeBlocks(content: string): string {
+  // Regular expression to find code blocks
+  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+  
+  // Replace code blocks with enhanced versions that include language data attribute
+  return content.replace(codeBlockRegex, (match, language, code) => {
+    const lang = language || 'plaintext';
+    
+    return `<pre class="language-${lang}" data-language="${lang}"><code class="language-${lang}">${code}</code></pre>`;
+  });
+}
+
 // Parse the content and extract custom component tags
 function parseContent(content: string) {
   const hasAnimatedGreeting = content.includes('<AnimatedGreeting');
   const hasFloatingIcons = content.includes('<FloatingIcons');
   
+  // Clean the content by removing the component tags
+  let cleanedContent = content;
+  if (hasAnimatedGreeting) {
+    cleanedContent = cleanedContent.replace(/<AnimatedGreeting[^>]*><\/AnimatedGreeting>/g, '');
+  }
+  if (hasFloatingIcons) {
+    cleanedContent = cleanedContent.replace(/<FloatingIcons[^>]*><\/FloatingIcons>/g, '');
+  }
+  
+  // Process code blocks for syntax highlighting
+  cleanedContent = processCodeBlocks(cleanedContent);
+  
   return {
     hasAnimatedGreeting,
-    hasFloatingIcons
+    hasFloatingIcons,
+    cleanedContent
   };
 }
 
 export const MDXContent: React.FC<MDXContentProps> = ({ content }) => {
   const [mounted, setMounted] = useState(false);
-  const { hasAnimatedGreeting, hasFloatingIcons } = parseContent(content);
+  const { hasAnimatedGreeting, hasFloatingIcons, cleanedContent } = parseContent(content);
   
   useEffect(() => {
     setMounted(true);
     
-    // Highlight all code blocks
-    if (typeof window !== 'undefined') {
-      Prism.highlightAll();
-    }
+    // Wait for DOM to be fully rendered before highlighting
+    setTimeout(() => {
+      if (typeof window !== 'undefined') {
+        // Initialize Prism for syntax highlighting
+        Prism.highlightAll();
+        
+        // Add language labels to code blocks
+        document.querySelectorAll('pre[class*="language-"]').forEach((pre) => {
+          const lang = pre.className.match(/language-(\w+)/)?.[1] || '';
+          if (lang) {
+            pre.setAttribute('data-language', lang);
+          }
+        });
+      }
+    }, 100);
   }, [content]);
 
   if (!mounted) {
     // Return fallback version without components
     return (
-      <div className="prose prose-lg max-w-none dark:prose-invert">
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+      <div className="blog-content prose prose-lg max-w-none dark:prose-invert">
+        <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
       </div>
     );
   }
 
   return (
-    <div className="prose prose-lg max-w-none dark:prose-invert">
-      {/* Render custom components if they exist in the content */}
+    <div className="blog-content">
+      {/* Title Animation */}
       {hasAnimatedGreeting && (
-        <div className="my-8">
+        <div className="my-8 text-center">
           <AnimatedGreeting text="Hello World!" />
         </div>
       )}
       
-      <div dangerouslySetInnerHTML={{ __html: content.replace(/<AnimatedGreeting[^>]*><\/AnimatedGreeting>/g, '') }} />
+      {/* Main Content */}
+      <div className="prose prose-lg max-w-none dark:prose-invert my-8">
+        <div 
+          dangerouslySetInnerHTML={{ __html: cleanedContent }} 
+          suppressHydrationWarning={true}
+        />
+      </div>
       
+      {/* Floating Icons */}
       {hasFloatingIcons && (
-        <div className="my-8">
+        <div className="my-12">
           <FloatingIcons />
         </div>
       )}
