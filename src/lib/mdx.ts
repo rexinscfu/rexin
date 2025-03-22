@@ -33,6 +33,7 @@ export interface PostMeta {
   featured: boolean;
   author: Author;
   readingTime: string;
+  tags?: string[];
 }
 
 // Define full blog post interface (metadata + content)
@@ -116,7 +117,8 @@ export const getAllPosts = cache(async (): Promise<PostMeta[]> => {
           category: matterResult.data.category || 'Uncategorized',
           featured: matterResult.data.featured || false,
           author,
-          readingTime: `${Math.ceil(stats.minutes)} min read`
+          readingTime: `${Math.ceil(stats.minutes)} min read`,
+          tags: matterResult.data.tags || []
         };
       });
       
@@ -144,7 +146,16 @@ export function getFeaturedPosts(): Promise<PostMeta[]> {
 // Get posts by category
 export function getPostsByCategory(category: string): Promise<PostMeta[]> {
   return getAllPosts().then(posts => 
-    posts.filter(post => post.category.toLowerCase().replace(/ /g, '-') === category.toLowerCase())
+    posts.filter(post => post.category.toLowerCase().replace(/ /g, '-') === category)
+  );
+}
+
+// Get posts by tag
+export function getPostsByTag(tag: string): Promise<PostMeta[]> {
+  return getAllPosts().then(posts => 
+    posts.filter(post => post.tags && post.tags.some(postTag => 
+      postTag.toLowerCase().replace(/ /g, '-') === tag)
+    )
   );
 }
 
@@ -175,9 +186,25 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     let contentHtml;
     
     if (isMDX) {
-      // For MDX files, just return the content as-is
-      // The actual rendering will happen in the client component
-      contentHtml = matterResult.content;
+      // For MDX files, process with remark to handle regular markdown
+      const processedContent = await unified()
+        .use(remarkParse)
+        .use(remarkRehype)
+        .use(rehypeStringify)
+        .process(matterResult.content);
+        
+      contentHtml = processedContent.toString();
+      
+      // Keep MDX component tags intact for client-side processing
+      const componentRegex = /<(AnimatedGreeting|FloatingIcons)[^>]*><\/(AnimatedGreeting|FloatingIcons)>/g;
+      const componentMatches = Array.from(matterResult.content.matchAll(componentRegex));
+      
+      // Insert component tags back into HTML
+      if (componentMatches.length > 0) {
+        for (const match of componentMatches) {
+          contentHtml = contentHtml.replace(/<p>[\s]*<\/p>/, match[0]);
+        }
+      }
     } else {
       // For regular markdown files, convert to HTML
       const processedContent = await remark()
@@ -205,7 +232,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       featured: matterResult.data.featured || false,
       author,
       readingTime: `${Math.ceil(stats.minutes)} min read`,
-      content: contentHtml
+      content: contentHtml,
+      tags: matterResult.data.tags || []
     };
   } catch (error) {
     console.error(`Error getting post by slug (${slug}):`, error);

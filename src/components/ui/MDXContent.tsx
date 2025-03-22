@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { AnimatedGreeting } from './AnimatedGreeting';
 import { FloatingIcons } from './FloatingIcons';
 import Prism from 'prismjs';
@@ -28,72 +28,135 @@ interface MDXContentProps {
   content: string;
 }
 
-// Process markdown content to enhance code blocks with language detection
-function processCodeBlocks(content: string): string {
-  // Regular expression to find code blocks
-  const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
-  
-  // Replace code blocks with enhanced versions that include language data attribute
-  return content.replace(codeBlockRegex, (match, language, code) => {
-    const lang = language || 'plaintext';
-    
-    return `<pre class="language-${lang}" data-language="${lang}"><code class="language-${lang}">${code}</code></pre>`;
-  });
-}
-
-// Parse the content and extract custom component tags
-function parseContent(content: string) {
-  const hasAnimatedGreeting = content.includes('<AnimatedGreeting');
-  const hasFloatingIcons = content.includes('<FloatingIcons');
-  
-  // Clean the content by removing the component tags
-  let cleanedContent = content;
-  if (hasAnimatedGreeting) {
-    cleanedContent = cleanedContent.replace(/<AnimatedGreeting[^>]*><\/AnimatedGreeting>/g, '');
-  }
-  if (hasFloatingIcons) {
-    cleanedContent = cleanedContent.replace(/<FloatingIcons[^>]*><\/FloatingIcons>/g, '');
-  }
-  
-  // Process code blocks for syntax highlighting
-  cleanedContent = processCodeBlocks(cleanedContent);
-  
+// Check for component tags in content
+function hasComponentTags(content: string) {
   return {
-    hasAnimatedGreeting,
-    hasFloatingIcons,
-    cleanedContent
+    hasAnimatedGreeting: content.includes('<AnimatedGreeting') || content.includes('&lt;AnimatedGreeting'),
+    hasFloatingIcons: content.includes('<FloatingIcons') || content.includes('&lt;FloatingIcons')
   };
 }
 
 export const MDXContent: React.FC<MDXContentProps> = ({ content }) => {
   const [mounted, setMounted] = useState(false);
-  const { hasAnimatedGreeting, hasFloatingIcons, cleanedContent } = parseContent(content);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const { hasAnimatedGreeting, hasFloatingIcons } = hasComponentTags(content);
   
   useEffect(() => {
     setMounted(true);
     
-    // Wait for DOM to be fully rendered before highlighting
-    setTimeout(() => {
-      if (typeof window !== 'undefined') {
-        // Initialize Prism for syntax highlighting
-        Prism.highlightAll();
-        
-        // Add language labels to code blocks
-        document.querySelectorAll('pre[class*="language-"]').forEach((pre) => {
-          const lang = pre.className.match(/language-(\w+)/)?.[1] || '';
-          if (lang) {
-            pre.setAttribute('data-language', lang);
+    // Apply code styling to pre and code blocks
+    if (contentRef.current) {
+      const preBlocks = contentRef.current.querySelectorAll('pre');
+      
+      preBlocks.forEach(pre => {
+        // Add language class if not already present
+        if (!pre.className.includes('language-')) {
+          const codeElement = pre.querySelector('code');
+          
+          if (codeElement) {
+            // Try to detect language from first line
+            const content = codeElement.textContent || '';
+            const lines = content.split('\n');
+            const firstLine = lines[0].trim();
+            
+            let language = 'plaintext';
+            
+            // Explicit detection for fenced code blocks that specify language
+            const fencedCodeMatch = firstLine.match(/^```(\w+)/);
+            if (fencedCodeMatch && fencedCodeMatch[1]) {
+              language = fencedCodeMatch[1].toLowerCase();
+              // Update content to remove language marker if it's still in the code
+              if (firstLine.startsWith('```')) {
+                codeElement.textContent = lines.slice(1).join('\n');
+              }
+            } 
+            // Better detection based on file content and patterns
+            else if (content.includes('fn main()') && content.includes('println!')) {
+              language = 'rust';
+            } else if (content.includes('printf') && (content.includes('#include') || content.includes('int main'))) {
+              language = 'c';
+            } else if (content.includes('const') && content.includes(': ') && content.includes('=>')) {
+              language = 'typescript';
+            } else if (content.includes('console.log')) {
+              language = 'javascript';
+            } else if (content.includes('body {') || content.includes('@media')) {
+              language = 'css';
+            }
+            
+            // Apply special case detection for hello example
+            if (content.includes('Hello, 2025!') && content.includes('#include')) {
+              language = 'c';
+            } else if (content.includes('Hello, 2025!') && content.includes('fn main()')) {
+              language = 'rust';
+            } else if (content.includes('greeting()') && content.includes('const year: number')) {
+              language = 'typescript';
+            }
+            
+            pre.className = `language-${language}`;
+            codeElement.className = `language-${language}`;
+            
+            // Add language badge as an element instead of using pseudo-element
+            const badge = document.createElement('span');
+            badge.className = 'language-badge';
+            badge.textContent = language;
+            pre.appendChild(badge);
           }
-        });
+        } else {
+          // For pre blocks that already have a language class
+          const languageClass = Array.from(pre.classList).find(cls => cls.startsWith('language-'));
+          if (languageClass) {
+            const language = languageClass.replace('language-', '');
+            // Add language badge
+            const badge = document.createElement('span');
+            badge.className = 'language-badge';
+            badge.textContent = language;
+            pre.appendChild(badge);
+          }
+        }
+      });
+      
+      // Highlight code blocks
+      Prism.highlightAllUnder(contentRef.current);
+    }
+  }, [content, mounted]);
+
+  // Remove component tags from content for display
+  let displayContent = content;
+  if (hasAnimatedGreeting) {
+    // Handle both raw tags and escaped HTML entities
+    displayContent = displayContent.replace(/<AnimatedGreeting[^>]*><\/AnimatedGreeting>/g, '');
+    displayContent = displayContent.replace(/&lt;AnimatedGreeting[^&]*&gt;&lt;\/AnimatedGreeting&gt;/g, '');
+  }
+  if (hasFloatingIcons) {
+    // Handle both raw tags and escaped HTML entities
+    displayContent = displayContent.replace(/<FloatingIcons[^>]*><\/FloatingIcons>/g, '');
+    displayContent = displayContent.replace(/&lt;FloatingIcons[^&]*&gt;&lt;\/FloatingIcons&gt;/g, '');
+  }
+
+  // Function to extract custom title from AnimatedGreeting component tag
+  const getCustomTitle = () => {
+    try {
+      const titleMatch = content.match(/<AnimatedGreeting\s+text=["']([^"']+)["']/);
+      const entityTitleMatch = content.match(/&lt;AnimatedGreeting\s+text=["']([^"']+)["']/);
+      
+      if (titleMatch && titleMatch[1]) {
+        return titleMatch[1];
+      } else if (entityTitleMatch && entityTitleMatch[1]) {
+        return entityTitleMatch[1];
       }
-    }, 100);
-  }, [content]);
+      
+      return null;
+    } catch (error) {
+      console.error('Error extracting title:', error);
+      return null;
+    }
+  };
 
   if (!mounted) {
     // Return fallback version without components
     return (
-      <div className="blog-content prose prose-lg max-w-none dark:prose-invert">
-        <div dangerouslySetInnerHTML={{ __html: cleanedContent }} />
+      <div className="blog-content">
+        <div dangerouslySetInnerHTML={{ __html: displayContent }} />
       </div>
     );
   }
@@ -103,14 +166,15 @@ export const MDXContent: React.FC<MDXContentProps> = ({ content }) => {
       {/* Title Animation */}
       {hasAnimatedGreeting && (
         <div className="my-8 text-center">
-          <AnimatedGreeting text="Hello World!" />
+          <AnimatedGreeting text={getCustomTitle() || "Hello World!"} />
         </div>
       )}
       
       {/* Main Content */}
       <div className="prose prose-lg max-w-none dark:prose-invert my-8">
         <div 
-          dangerouslySetInnerHTML={{ __html: cleanedContent }} 
+          ref={contentRef}
+          dangerouslySetInnerHTML={{ __html: displayContent }} 
           suppressHydrationWarning={true}
         />
       </div>

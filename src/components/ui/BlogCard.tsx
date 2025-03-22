@@ -47,6 +47,26 @@ export function BlogCard({ post, index = 0, featured = false }: BlogCardProps) {
           </p>
         </div>
         
+        {/* Tags display */}
+        {post.tags && post.tags.length > 0 && (
+          <div className="flex flex-wrap gap-2 mb-4">
+            {post.tags.slice(0, 3).map((tag) => (
+              <Link 
+                key={tag}
+                href={`/blog/tag/${slugify(tag)}`}
+                className="z-10 relative inline-flex items-center px-2 py-0.5 text-xs rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors"
+              >
+                #{tag}
+              </Link>
+            ))}
+            {post.tags.length > 3 && (
+              <span className="text-xs text-gray-500 dark:text-gray-400">
+                +{post.tags.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
+        
         {/* Metadata and Read More */}
         <div className="flex flex-col space-y-4">
           <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-500">

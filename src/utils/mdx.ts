@@ -26,6 +26,7 @@ export interface PostMeta {
   featured: boolean;
   author: Author;
   readingTime: string;
+  tags?: string[];
 }
 
 // Define full blog post interface (metadata + content)
@@ -109,7 +110,8 @@ export function getAllPosts(): PostMeta[] {
           category: matterResult.data.category || 'Uncategorized',
           featured: matterResult.data.featured || false,
           author,
-          readingTime: `${Math.ceil(stats.minutes)} min read`
+          readingTime: `${Math.ceil(stats.minutes)} min read`,
+          tags: matterResult.data.tags || []
         };
       });
       
@@ -184,7 +186,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
         featured: matterResult.data.featured || false,
         author,
         readingTime: `${Math.ceil(stats.minutes)} min read`,
-        content: contentHtml
+        content: contentHtml,
+        tags: matterResult.data.tags || []
       };
     }
     
@@ -218,7 +221,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       featured: matterResult.data.featured || false,
       author,
       readingTime: `${Math.ceil(stats.minutes)} min read`,
-      content: contentHtml
+      content: contentHtml,
+      tags: matterResult.data.tags || []
     };
   } catch (error) {
     console.error(`Error getting post by slug (${slug}):`, error);

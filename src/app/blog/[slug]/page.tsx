@@ -1,7 +1,7 @@
 import { Metadata, ResolvingMetadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Calendar, Clock } from 'lucide-react';
+import { Calendar, Clock, Tag } from 'lucide-react';
 import { getAllPostSlugs, getPostBySlug } from '@/lib/mdx';
 import { slugify } from '@/lib/utils/slugify';
 import MDXContent from '@/components/ui/MDXContent';
@@ -109,11 +109,43 @@ export default async function PostPage({ params }: PostPageProps) {
               </p>
             </div>
           </div>
+          
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+              <Tag className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              {post.tags.map((tag: string) => (
+                <Link 
+                  key={tag}
+                  href={`/blog/tag/${slugify(tag)}`}
+                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 dark:bg-blue-900 dark:text-blue-100 dark:hover:bg-blue-800 transition-colors"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          )}
         </header>
         
         <div className="p-6">
           <MDXContent content={post.content} />
         </div>
+        
+        {post.tags && post.tags.length > 0 && (
+          <footer className="px-6 py-4 border-t border-gray-200 dark:border-gray-800">
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Tags:</span>
+              {post.tags.map((tag: string) => (
+                <Link 
+                  key={tag}
+                  href={`/blog/tag/${slugify(tag)}`}
+                  className="inline-flex items-center px-3 py-1 rounded-md text-sm font-medium bg-gray-100 text-gray-800 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 transition-colors"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          </footer>
+        )}
       </article>
     </main>
   );
