@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AnimatedGreeting } from './AnimatedGreeting';
 import { FloatingIcons } from './FloatingIcons';
 import Prism from 'prismjs';
@@ -17,7 +17,6 @@ import 'prismjs/components/prism-json';
 import 'prismjs/components/prism-bash';
 import 'prismjs/components/prism-markdown';
 import 'prismjs/components/prism-yaml';
-import ReactDOM from 'react-dom';
 
 // Define all available MDX components
 export const mdxComponents = {
@@ -29,87 +28,55 @@ interface MDXContentProps {
   content: string;
 }
 
-// Function to inject custom components
-function injectCustomComponents(htmlContent: string): string {
-  let processedContent = htmlContent;
+// Parse the content and extract custom component tags
+function parseContent(content: string) {
+  const hasAnimatedGreeting = content.includes('<AnimatedGreeting');
+  const hasFloatingIcons = content.includes('<FloatingIcons');
   
-  // Replace AnimatedGreeting tags
-  if (processedContent.includes('<AnimatedGreeting')) {
-    const AnimatedGreetingComponent = React.createElement(AnimatedGreeting);
-    const renderedComponent = document.createElement('div');
-    renderedComponent.className = 'animated-greeting-wrapper';
-    renderedComponent.innerHTML = '<div id="animated-greeting-placeholder"></div>';
-    
-    // Use a placeholder div that will be replaced after rendering
-    processedContent = processedContent.replace(
-      /<AnimatedGreeting[^>]*><\/AnimatedGreeting>/g, 
-      renderedComponent.outerHTML
-    );
-  }
-  
-  // Replace FloatingIcons tags
-  if (processedContent.includes('<FloatingIcons')) {
-    const FloatingIconsComponent = React.createElement(FloatingIcons);
-    const renderedComponent = document.createElement('div');
-    renderedComponent.className = 'floating-icons-wrapper';
-    renderedComponent.innerHTML = '<div id="floating-icons-placeholder"></div>';
-    
-    // Use a placeholder div that will be replaced after rendering
-    processedContent = processedContent.replace(
-      /<FloatingIcons[^>]*><\/FloatingIcons>/g, 
-      renderedComponent.outerHTML
-    );
-  }
-  
-  return processedContent;
+  return {
+    hasAnimatedGreeting,
+    hasFloatingIcons
+  };
 }
 
 export const MDXContent: React.FC<MDXContentProps> = ({ content }) => {
+  const [mounted, setMounted] = useState(false);
+  const { hasAnimatedGreeting, hasFloatingIcons } = parseContent(content);
+  
   useEffect(() => {
+    setMounted(true);
+    
     // Highlight all code blocks
     if (typeof window !== 'undefined') {
       Prism.highlightAll();
-      
-      // Replace placeholders with actual components
-      const animatedGreetingPlaceholder = document.getElementById('animated-greeting-placeholder');
-      if (animatedGreetingPlaceholder) {
-        const container = animatedGreetingPlaceholder.parentElement;
-        if (container) {
-          // Clear the container and render the component
-          container.innerHTML = '';
-          const root = document.createElement('div');
-          container.appendChild(root);
-          const greeting = React.createElement(AnimatedGreeting);
-          // @ts-ignore - Using DOM rendering for simplicity
-          ReactDOM.render(greeting, root);
-        }
-      }
-      
-      const floatingIconsPlaceholder = document.getElementById('floating-icons-placeholder');
-      if (floatingIconsPlaceholder) {
-        const container = floatingIconsPlaceholder.parentElement;
-        if (container) {
-          // Clear the container and render the component
-          container.innerHTML = '';
-          const root = document.createElement('div');
-          container.appendChild(root);
-          const icons = React.createElement(FloatingIcons);
-          // @ts-ignore - Using DOM rendering for simplicity
-          ReactDOM.render(icons, root);
-        }
-      }
     }
   }, [content]);
 
-  // Process the content to handle custom components
-  const processedContent = injectCustomComponents(content);
+  if (!mounted) {
+    // Return fallback version without components
+    return (
+      <div className="prose prose-lg max-w-none dark:prose-invert">
+        <div dangerouslySetInnerHTML={{ __html: content }} />
+      </div>
+    );
+  }
 
   return (
     <div className="prose prose-lg max-w-none dark:prose-invert">
-      <div 
-        dangerouslySetInnerHTML={{ __html: processedContent }} 
-        suppressHydrationWarning={true}
-      />
+      {/* Render custom components if they exist in the content */}
+      {hasAnimatedGreeting && (
+        <div className="my-8">
+          <AnimatedGreeting text="Hello World!" />
+        </div>
+      )}
+      
+      <div dangerouslySetInnerHTML={{ __html: content.replace(/<AnimatedGreeting[^>]*><\/AnimatedGreeting>/g, '') }} />
+      
+      {hasFloatingIcons && (
+        <div className="my-8">
+          <FloatingIcons />
+        </div>
+      )}
     </div>
   );
 };

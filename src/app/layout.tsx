@@ -12,6 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Firmware Engineer & Hardware Creator",
   description: "Professional portfolio showcasing firmware engineering, low-level development, hardware creation, and electronic repair expertise.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://rexin.dev'),
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
