@@ -5,6 +5,7 @@ import { CalendarIcon, ClockIcon, TagIcon, ArrowLeftIcon } from '@heroicons/reac
 import { getAllPostSlugs, getPostBySlug, getAllPosts } from '@/lib/mdx';
 import { BlogCard } from '@/components/ui/BlogCard';
 import { slugify } from '@/utils/slugify';
+import MDXContent from '@/components/ui/MDXContent';
 
 interface PostPageProps {
   params: {
@@ -93,10 +94,9 @@ export default async function PostPage({ params }: PostPageProps) {
           </header>
           
           {/* Post Content */}
-          <div 
-            className="blog-content text-zinc-800 dark:text-zinc-200"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          <div className="blog-content text-zinc-800 dark:text-zinc-200">
+            <MDXContent content={post.content} />
+          </div>
           
           {/* Author bio with image */}
           <div className="border-t border-gray-200 dark:border-zinc-800 py-8 mt-12 mb-12">

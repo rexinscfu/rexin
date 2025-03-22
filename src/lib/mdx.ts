@@ -6,6 +6,12 @@ import html from 'remark-html';
 import readingTime from 'reading-time';
 import { cache } from 'react';
 import Prism from 'prismjs';
+import { formatDate as dateFormat } from 'date-fns';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
+import rehypeStringify from 'rehype-stringify';
+import rehypeHighlight from 'rehype-highlight';
 
 // Load Prism languages
 require('prismjs/components/prism-typescript');
@@ -158,71 +164,76 @@ export function getPostsByCategory(category: string): Promise<PostMeta[]> {
 }
 
 // Get a single post by slug
-export const getPostBySlug = cache(async (slug: string): Promise<Post | null> => {
+export async function getPostBySlug(slug: string): Promise<Post | null> {
   try {
-    const mdPath = path.join(postsDirectory, `${slug}.md`);
-    const mdxPath = path.join(postsDirectory, `${slug}.mdx`);
-    let fullPath: string;
-
-    if (fs.existsSync(mdxPath)) {
-      fullPath = mdxPath;
-    } else if (fs.existsSync(mdPath)) {
-      fullPath = mdPath;
-    } else {
-      return null;
-    }
-
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const { data, content } = matter(fileContents);
-    const stats = readingTime(content);
-
-    // Process markdown content with enhanced HTML options
-    const processedContent = await remark()
-      .use(html, { 
-        sanitize: false,
-        xhtmlOut: true,
-        breaks: true
-      })
-      .process(content);
-
-    let contentHtml = processedContent.toString();
-
-    // Apply Prism.js syntax highlighting
-    contentHtml = contentHtml.replace(
-      /<pre><code class="language-([^"]+)">([\s\S]*?)<\/code><\/pre>/g,
-      (match, language, code) => {
-        try {
-          const highlighted = Prism.highlight(
-            code,
-            Prism.languages[language] || Prism.languages.javascript,
-            language
-          );
-          return `<pre class="language-${language}"><code class="language-${language}">${highlighted}</code></pre>`;
-        } catch (error) {
-          console.error(`Error highlighting ${language} code:`, error);
-          return match;
-        }
+    let fullPath = path.join(postsDirectory, `${slug}.mdx`);
+    let isMDX = true;
+    
+    // Check if MDX file exists
+    if (!fs.existsSync(fullPath)) {
+      // Try MD file if MDX doesn't exist
+      fullPath = path.join(postsDirectory, `${slug}.md`);
+      isMDX = false;
+      
+      // If MD file doesn't exist either, return null
+      if (!fs.existsSync(fullPath)) {
+        return null;
       }
-    );
-
-    const author = data.author || defaultAuthor;
-    const formattedDate = formatDate(data.date);
-
+    }
+    
+    // Read file contents
+    const fileContents = fs.readFileSync(fullPath, 'utf8');
+    const matterResult = matter(fileContents);
+    const stats = readingTime(matterResult.content);
+    
+    // Process content based on file type
+    let contentHtml;
+    
+    if (isMDX) {
+      // For MDX files, we'll just convert the markdown parts and leave imports and JSX as-is
+      // The actual rendering of components will happen client-side
+      contentHtml = matterResult.content;
+      
+      // Process markdown parts with syntax highlighting
+      const processedContent = await unified()
+        .use(remarkParse)
+        .use(remarkRehype)
+        .use(rehypeHighlight)
+        .use(rehypeStringify)
+        .process(matterResult.content);
+        
+      contentHtml = processedContent.toString();
+    } else {
+      // For regular markdown files, convert to HTML
+      const processedContent = await remark()
+        .use(html, { sanitize: false })
+        .process(matterResult.content);
+        
+      contentHtml = processedContent.toString();
+    }
+    
+    // Format date
+    const date = matterResult.data.date;
+    const formattedDate = formatDate(date);
+    
+    // Get or use default author
+    const author = matterResult.data.author || defaultAuthor;
+    
     return {
       slug,
-      content: contentHtml,
-      title: data.title,
-      date: data.date,
+      title: matterResult.data.title,
+      date,
       formattedDate,
-      coverImage: data.coverImage || '/images/blog-default-cover.jpg',
-      excerpt: data.excerpt || '',
-      category: data.category || 'Uncategorized',
-      featured: data.featured || false,
+      coverImage: matterResult.data.coverImage || '/images/blog-default-cover.jpg',
+      excerpt: matterResult.data.excerpt || '',
+      category: matterResult.data.category || 'Uncategorized',
+      featured: matterResult.data.featured || false,
       author,
-      readingTime: `${Math.ceil(stats.minutes)} min read`
+      readingTime: `${Math.ceil(stats.minutes)} min read`,
+      content: contentHtml
     };
   } catch (error) {
-    console.error('Error getting post by slug:', error);
+    console.error(`Error getting post by slug (${slug}):`, error);
     return null;
   }
-}); 
+} 
