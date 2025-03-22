@@ -1,11 +1,12 @@
-import { Metadata } from 'next';
+import { Metadata, ResolvingMetadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CalendarIcon, ClockIcon, TagIcon, ArrowLeftIcon } from '@heroicons/react/24/outline';
-import { getAllPostSlugs, getPostBySlug, getAllPosts } from '@/lib/mdx';
-import { BlogCard } from '@/components/ui/BlogCard';
-import { slugify } from '@/utils/slugify';
+import { Calendar, Clock } from 'lucide-react';
+import { getAllPostSlugs, getPostBySlug } from '@/lib/mdx';
+import { slugify } from '@/lib/utils/slugify';
 import MDXContent from '@/components/ui/MDXContent';
+import Image from 'next/image';
+import { formatDistance } from 'date-fns';
 
 interface PostPageProps {
   params: {
@@ -13,19 +14,30 @@ interface PostPageProps {
   };
 }
 
-export async function generateMetadata({ params }: PostPageProps): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: PostPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
   const post = await getPostBySlug(params.slug);
   
   if (!post) {
     return {
       title: 'Post Not Found',
-      description: 'The post you are looking for does not exist'
+      description: 'The requested blog post could not be found.'
     };
   }
   
   return {
-    title: `${post.title} - Rexin Blog`,
+    title: post.title,
     description: post.excerpt,
+    authors: [{ name: post.author.name }],
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      publishedTime: post.date,
+      authors: [post.author.name],
+    },
   };
 }
 
@@ -42,96 +54,67 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  // Get related posts (same category, excluding current)
-  const allPosts = await getAllPosts();
-  const relatedPosts = allPosts
-    .filter(p => p.category === post.category && p.slug !== post.slug)
-    .slice(0, 3);
+  const datePublished = new Date(post.date);
+  const timeAgo = formatDistance(datePublished, new Date(), { addSuffix: true });
 
   // Slugify the category for the link
   const categorySlug = slugify(post.category);
 
   return (
-    <div className="py-12">
-      <div className="container max-w-4xl mx-auto px-4">
-        {/* Back to blog link */}
-        <div className="mb-8">
-          <Link href="/blog" className="inline-flex items-center text-blue-500 hover:text-blue-700 transition-colors">
-            <ArrowLeftIcon className="w-4 h-4 mr-2" />
-            <span>Back to all posts</span>
-          </Link>
-        </div>
-        
-        <article>
-          {/* Post Header */}
-          <header className="mb-10">
-            {/* Category */}
+    <main className="container px-4 py-12 mx-auto max-w-4xl">
+      <div className="mb-8">
+        <Link href="/blog" className="inline-flex items-center text-blue-500 hover:text-blue-700 transition-colors">
+          <span>← Back to all posts</span>
+        </Link>
+      </div>
+      
+      <article className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden">
+        <header className="p-6 border-b border-gray-200 dark:border-gray-800">
+          <div className="mb-2">
             <Link 
               href={`/blog/category/${categorySlug}`}
-              className="inline-flex items-center bg-blue-500/10 text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-full text-sm mb-4"
+              className="text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline"
             >
-              <TagIcon className="w-4 h-4 mr-1" />
               {post.category}
             </Link>
-            
-            {/* Title */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-zinc-800 dark:text-white mb-4">
-              {post.title}
-            </h1>
-            
-            {/* Meta info */}
-            <div className="flex items-center gap-x-6 text-sm text-zinc-600 dark:text-zinc-400 mb-8">
-              <div className="flex items-center">
-                <CalendarIcon className="w-4 h-4 mr-1" />
-                <span>{post.formattedDate}</span>
-              </div>
-              
-              <div className="flex items-center">
-                <ClockIcon className="w-4 h-4 mr-1" />
-                <span>{post.readingTime}</span>
-              </div>
-            </div>
-          </header>
-          
-          {/* Post Content */}
-          <div className="blog-content text-zinc-800 dark:text-zinc-200">
-            <MDXContent content={post.content} />
           </div>
-          
-          {/* Author bio with image */}
-          <div className="border-t border-gray-200 dark:border-zinc-800 py-8 mt-12 mb-12">
-            <div className="flex items-center gap-4">
-              <img 
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            {post.title}
+          </h1>
+          <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center">
+              <Calendar className="w-4 h-4 mr-1" />
+              <time dateTime={post.date} title={post.formattedDate}>
+                {post.formattedDate} ({timeAgo})
+              </time>
+            </div>
+            <div className="flex items-center">
+              <Clock className="w-4 h-4 mr-1" />
+              <span>{post.readingTime}</span>
+            </div>
+          </div>
+          <div className="flex items-center mt-4">
+            <div className="flex-shrink-0 h-8 w-8 relative overflow-hidden rounded-full">
+              <Image
                 src={post.author.image}
                 alt={post.author.name}
-                className="w-12 h-12 rounded-full"
-                width={48}
-                height={48}
+                width={32}
+                height={32}
+                className="object-cover"
               />
-              <div className="flex-1">
-                <h3 className="text-lg font-semibold text-zinc-800 dark:text-white mb-2">
-                  Written by {post.author.name}
-                </h3>
-                <p className="text-zinc-600 dark:text-zinc-400">
-                  Firmware developer and hardware creator with a passion for low-level programming and electronic repairs.
-                </p>
-              </div>
+            </div>
+            <div className="ml-2 text-sm">
+              <p className="font-medium text-gray-900 dark:text-white">
+                {post.author.name}
+              </p>
             </div>
           </div>
-          
-          {/* Related Posts */}
-          {relatedPosts.length > 0 && (
-            <div className="border-t border-gray-200 dark:border-zinc-800 pt-12">
-              <h2 className="text-2xl font-bold text-zinc-800 dark:text-white mb-6">Related Articles</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {relatedPosts.map((relatedPost, index) => (
-                  <BlogCard key={relatedPost.slug} post={relatedPost} index={index} />
-                ))}
-              </div>
-            </div>
-          )}
-        </article>
-      </div>
-    </div>
+        </header>
+        
+        <div className="p-6">
+          <MDXContent content={post.content} />
+        </div>
+      </article>
+    </main>
   );
 } 

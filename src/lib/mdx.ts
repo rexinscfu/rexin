@@ -5,27 +5,12 @@ import { remark } from 'remark';
 import html from 'remark-html';
 import readingTime from 'reading-time';
 import { cache } from 'react';
-import Prism from 'prismjs';
 import { formatDate as dateFormat } from 'date-fns';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import rehypeHighlight from 'rehype-highlight';
-
-// Load Prism languages
-require('prismjs/components/prism-typescript');
-require('prismjs/components/prism-javascript');
-require('prismjs/components/prism-css');
-require('prismjs/components/prism-jsx');
-require('prismjs/components/prism-tsx');
-require('prismjs/components/prism-c');
-require('prismjs/components/prism-cpp');
-require('prismjs/components/prism-rust');
-require('prismjs/components/prism-json');
-require('prismjs/components/prism-bash');
-require('prismjs/components/prism-markdown');
-require('prismjs/components/prism-yaml');
 
 // Define the blog content directory
 const postsDirectory = path.join(process.cwd(), 'content/blog');
@@ -190,19 +175,9 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
     let contentHtml;
     
     if (isMDX) {
-      // For MDX files, we'll just convert the markdown parts and leave imports and JSX as-is
-      // The actual rendering of components will happen client-side
+      // For MDX files, just return the content as-is
+      // The actual rendering will happen in the client component
       contentHtml = matterResult.content;
-      
-      // Process markdown parts with syntax highlighting
-      const processedContent = await unified()
-        .use(remarkParse)
-        .use(remarkRehype)
-        .use(rehypeHighlight)
-        .use(rehypeStringify)
-        .process(matterResult.content);
-        
-      contentHtml = processedContent.toString();
     } else {
       // For regular markdown files, convert to HTML
       const processedContent = await remark()
